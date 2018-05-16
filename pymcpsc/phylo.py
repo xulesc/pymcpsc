@@ -7,7 +7,7 @@ try:
     from ete3 import Tree, NodeStyle, TreeStyle
 except Exception as e:
     print(
-        'ete3 installation does not seem correct. pymcpsc phylogentic tree feature may not work correctly. (%s)' %str(e))
+        'ete3 installation does not seem correct. pymcpsc phylogentic tree feature may not work correctly. (%s)' % str(e))
 import os
 
 

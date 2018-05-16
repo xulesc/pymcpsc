@@ -34,6 +34,7 @@ __def_DATADIR__ = os.path.join(_base_dir, 'testdata', 'proteus')
 __def_PROGDIR__ = os.path.join(_base_dir, 'ext', 'x86_64', 'linux')
 __def_GTIN__ = os.path.join(_base_dir, 'testdata', 'ground_truth_proteus')
 
+
 class CONF:
 
     def __init__(self):
@@ -138,7 +139,7 @@ def process():
         mcpsc(conf.OUTDIR)
     else:
         mcpsc(conf.OUTDIR, map(float, conf.WEIGHTS.split(',')))
-    
+
     if conf.GTIN is None:
         print(
             'Not performing performance benchmarking because no ground-truth file supplied')
@@ -171,4 +172,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
