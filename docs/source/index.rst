@@ -9,8 +9,12 @@ Welcome to pymcpsc's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :numbered:
+   :titlesonly:
+   :glob:
+   :hidden:
 
-
+   readme_link
 
 Indices and tables
 ==================
