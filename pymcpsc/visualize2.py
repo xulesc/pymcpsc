@@ -170,11 +170,7 @@ def dNNClassify(
 def make(
     outdir='outdir',
     n_jobs=16,
-    psc_cols=[
-        'ce',
-        'gralign',
-        'tmalign',
-        'usm']):
+    psc_cols=[]):
     """ Manages creation of MDS based scatter plots. Reades in pairwise domain
     PSC and MCPSC scores from a file. MDS followed by scatter plots are then
     generated for each PSC method.

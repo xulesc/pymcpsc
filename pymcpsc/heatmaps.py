@@ -81,12 +81,7 @@ def generate_heatmaps(
 def make(
     outdir='outdir',
     make_images=True,
-    psc_cols=[
-        'ce',
-        'fast',
-        'gralign',
-        'tmalign',
-        'usm']):
+    psc_cols=[]):
     """ Manages creation of Heatmaps. Reades in pairwise domain
     PSC and MCPSC scores from a file. Heatmaps are then generated for each
     method.

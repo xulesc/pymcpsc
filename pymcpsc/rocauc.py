@@ -58,16 +58,10 @@ def plot(roc_data, auc_data, colnames, path):
 
 def make(
     outdir='outdir', do_user_mcpsc=True,
-    psc_cols=[
-        'tmalign',
-        'ce',
-        'gralign',
-        'fast',
-        'usm']):
+    psc_cols=[]):
     """ Generates ROCs for performance of the PSC methods. Also generates data files
     required for generating mixed ROCs.
     """
-    imputed_cols = map(lambda x: '%s_fill_mean', psc_cols)
     if do_user_mcpsc:
         mcpsc_cols = [
             'mcpsc_fill_0',

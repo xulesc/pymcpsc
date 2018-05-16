@@ -63,12 +63,7 @@ def multi_nnclassifyacc(df, colnames, klass):
 
 def make(
     outdir='outdir', do_user_mcpsc=True,
-    psc_cols=[
-        'tmalign',
-        'ce',
-        'gralign',
-        'fast',
-        'usm']):
+    psc_cols=[]):
     """ Generates leave-one-out nearest neighbor analysis accuracy performances of
     classifiers built with PSC and MCPSC scores.
     """

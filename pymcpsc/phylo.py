@@ -123,16 +123,14 @@ def plot_phylo_tree(rdata, colname, name, workdir, outdir):
 
 def make(outdir='outdir',
          workdir='work',
-         cols=['tmalign_fill_mean', 'ce_fill_mean', 'fast_fill_mean',
-                 'gralign_fill_mean', 'usm_fill_mean', 'mcpsc_fill_0',
-                 'mcpsc_fill_1', 'mcpsc_fill_2', 'mcpsc_fill_3',
-                 'mcpsc_fill_4', 'mcpsc_fill_median'],
-         names=['tmalign', 'ce', 'fast', 'gralign', 'usm', 'M1',
-                'M2', 'M3', 'M4', 'M5', 'Median_MCPSC']):
+         psc_cols=[],
+         psc_names=[]):
     """ Manages creation of Phylogenetic Trees. Reades in pairwise domain
     PSC and MCPSC scores from a file. Trees are then generated for each
     method.
     """
+    cols = map(lambda x: '%s_fill_mean' %x, psc_cols) + ['mcpsc_fill_0', 'mcpsc_fill_1', 'mcpsc_fill_2', 'mcpsc_fill_3', 'mcpsc_fill_4', 'mcpsc_fill_median']
+    names = psc_names + ['M1', 'M2', 'M3', 'M4', 'M5', 'Median_MCPSC']
     rdata = pd.read_csv(
         '%s%sprocessed.imputed.mcpsc.csv' %
         (outdir, os.path.sep))

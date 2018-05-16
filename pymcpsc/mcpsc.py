@@ -70,12 +70,7 @@ def make(
         4,
         1,
         1],
-        psc_cols=[
-            'ce',
-            'fast',
-            'gralign',
-            'tmalign',
-        'usm'], do_user_mcpsc=True):
+        psc_cols=[], do_user_mcpsc=True):
     """The main method for generating the consensus scores. Expects to load
     the imputed data file and writes as output a file with consensus scores
     appended for each protein domain pair.
