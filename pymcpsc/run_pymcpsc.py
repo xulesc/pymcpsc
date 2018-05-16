@@ -124,7 +124,7 @@ def process():
 
     # End of configuration
     print(conf)
-    
+
     psc_methods = ['ce', 'fast', 'gralign', 'tmalign', 'usm']
     psc_method_names = ['ce', 'fast', 'gralign', 'tmalign', 'usm']
 
@@ -138,9 +138,13 @@ def process():
     impute(conf.OUTDIR)
     print("Making MCPSC consensus scores")
     if conf.WEIGHTS is None:
-        mcpsc(conf.OUTDIR, psc_cols = psc_methods)
+        mcpsc(conf.OUTDIR, psc_cols=psc_methods)
     else:
-        mcpsc(conf.OUTDIR, map(float, conf.WEIGHTS.split(',')), psc_cols = psc_methods)
+        mcpsc(
+            conf.OUTDIR,
+            map(float,
+                conf.WEIGHTS.split(',')),
+            psc_cols=psc_methods)
 
     if conf.GTIN is None:
         print(
@@ -148,16 +152,20 @@ def process():
         return
 
     print("Nearest-neighbor classification")
-    nnclassify(conf.OUTDIR, conf.WEIGHTS is not None, psc_cols = psc_methods)
+    nnclassify(conf.OUTDIR, conf.WEIGHTS is not None, psc_cols=psc_methods)
     print("Making ROC curves")
-    rocauc(conf.OUTDIR, conf.WEIGHTS is not None, psc_cols = psc_methods)
+    rocauc(conf.OUTDIR, conf.WEIGHTS is not None, psc_cols=psc_methods)
     mixedroc(conf.OUTDIR, conf.WEIGHTS is not None)
     print("Running MDS and clustering")
-    mdsclust(conf.OUTDIR, conf.THREADS, psc_cols = psc_methods)
+    mdsclust(conf.OUTDIR, conf.THREADS, psc_cols=psc_methods)
     print("Making Heatmaps")
-    heatmap(conf.OUTDIR, psc_cols = psc_methods)
+    heatmap(conf.OUTDIR, psc_cols=psc_methods)
     print("Making Phylogenetic Trees")
-    phylotree(conf.OUTDIR, conf.WORKDIR, psc_cols = psc_methods, psc_names = psc_method_names)
+    phylotree(
+        conf.OUTDIR,
+        conf.WORKDIR,
+     psc_cols=psc_methods,
+     psc_names=psc_method_names)
     print("Done")
 
 

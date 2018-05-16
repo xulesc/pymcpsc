@@ -54,7 +54,7 @@ def plot(roc_data, auc_data, colnames, path):
 
 def make(
     outdir='outdir', do_user_mcpsc=True,
-    psc_cols=[]):
+        psc_cols=[]):
     """ Generates ROCs for performance of the PSC methods. Also generates data files
     required for generating mixed ROCs.
     """
