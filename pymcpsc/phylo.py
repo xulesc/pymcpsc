@@ -63,6 +63,9 @@ def plot_phylo_tree(rdata, colname, name, workdir, outdir):
     nj_tree = pdm1.nj_tree()
     nj_tree.write(file=open(dendro_path, 'w'), schema='newick')
 
+    if len(rdata) > 300:
+        return True
+
     # make the tree to visualize
     # open("/tmp/test.tre").readlines()[0].replace('\n','').replace('[&U]','')
     t = Tree(str(nj_tree) + ';')
