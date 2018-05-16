@@ -13,8 +13,8 @@
 # without alteration to the pymcpsc run script
 #
 
-ANACONDA_PATH = "/opt/anaconda2/"
-PYMCPSC_PATH = "$ANACONDA_PATH/lib/python2.7/site-packages/pymcpsc-0.1-py2.7.egg/pymcpsc"
+ANACONDA_PATH="/opt/anaconda2/"
+PYMCPSC_PATH="$ANACONDA_PATH/lib/python2.7/site-packages/pymcpsc-0.1-py2.7.egg/pymcpsc"
 
 xvfb-run python -u $PYMCPSC_PATH/run_pymcpsc.py "$@"
 
