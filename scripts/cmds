@@ -1,0 +1,2 @@
+# to format in pep8
+for x in `ls *.py`; do autopep8 --in-place --aggressive --aggressive $x; done
