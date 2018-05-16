@@ -9,7 +9,6 @@ to find and load user specified parameters from a previous run. On execution
 start a copy of the user parameters are written to the run_gui-args.json file.
 """
 import os
-import json
 import sys
 import pymcpsc
 import argparse
