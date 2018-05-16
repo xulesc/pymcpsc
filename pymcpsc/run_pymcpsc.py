@@ -161,11 +161,7 @@ def process():
     print("Making Heatmaps")
     heatmap(conf.OUTDIR, psc_cols=psc_methods)
     print("Making Phylogenetic Trees")
-    phylotree(
-        conf.OUTDIR,
-        conf.WORKDIR,
-     psc_cols=psc_methods,
-     psc_names=psc_method_names)
+    phylotree(conf.OUTDIR, conf.WORKDIR, psc_cols=psc_methods, psc_names=psc_method_names)
     print("Done")
 
 
@@ -179,6 +175,7 @@ def main():
         print('Done')
     except (KeyboardInterrupt, SystemExit):
         sys.exit(-1)
+
 
 if __name__ == '__main__':
     main()
