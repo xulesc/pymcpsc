@@ -9,10 +9,6 @@ from matplotlib import pyplot as plt
 
 import os
 import pandas as pd
-import random
-import numpy as np
-import itertools
-import sys
 from sklearn import metrics
 
 matplotlib.rcParams['pdf.fonttype'] = 42

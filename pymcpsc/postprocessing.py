@@ -5,15 +5,11 @@ PSC methods in order to prepare them for performance benchmarking.
 """
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 
 import os
 import numpy as np
-from timeit import default_timer as timer
 import math
 from math import exp
-# import seaborn as sns
-import pandas as pd
 import sys
 
 matplotlib.rcParams['pdf.fonttype'] = 42
@@ -97,7 +93,6 @@ class PostProcessor:
             'gralign/results.txt.sim',
             'tm_results_1.txt',
             'usm_results.txt']
-        methods = ['ce', 'fast', 'gralign', 'tmalign', 'usm']
         if config is None:
             indir = 'work'
             ground_truth = 'ground_truth'

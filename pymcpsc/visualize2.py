@@ -9,18 +9,14 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-import sys
 import os.path
 import pandas as pd
 import numpy as np
 from collections import defaultdict
 
 from sklearn.manifold import MDS
-from sklearn.metrics import explained_variance_score
-from sklearn.decomposition import PCA
 
 import numpy.linalg as la
-import numpy as np
 
 _s = 20 * 2
 
@@ -99,7 +95,7 @@ def get_eig(A):
     evals = eigen_val[idx]
     evecs = eigen_vec[:, idx]
 
-    return evals[:2], evec[:, :2]
+    return evals[:2], evecs[:, :2]
 
 
 def dNNClassify(
@@ -180,17 +176,6 @@ def make(
         (outdir, os.path.sep))
 
     # print raw_data.shape
-
-    ptex = lambda x: x.replace(
-        '\n ',
-        "\\\hline\n").strip().replace(
-        '  ',
-        ' & ').replace(
-            '[',
-            '').replace(
-                ']',
-        '')
-
     # Make dicts
     # print 'make dicts'
     cl = list('bgrcmykkkkk')
