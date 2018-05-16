@@ -21,3 +21,4 @@ docker run pymcpsc python -c "import sys; print '\n'.join(sys.path)"
 
 docker run -v /home/asharma/phd/docker-test:/usr/shared pymcpsc:latest run-pymcpsc -e pdb -d /usr/shared/data/pdb_files -g /usr/shared/data/ground_truth_ck
 
+sphinx-apidoc ../pymcpsc/ -o source/
