@@ -85,7 +85,7 @@ def plot_phylo_tree(rdata, colname, name, workdir, outdir):
     nj_tree = pdm1.nj_tree()
     nj_tree.write(file=open(dendro_path, 'w'), schema='newick')
 
-    if len(rdata) > 300:
+    if len(p) > 300:
         return True
 
     # make the tree to visualize if the number of domains is less than 300
