@@ -73,24 +73,52 @@ class CONF:
         self.OUTDIR = 'outdir'
 
     def set_data_dir(self, datadir):
+        """ Set datadir value
+
+        :param datadir: (string) directory with pdb files
+        """
         self.DATADIR = datadir
 
     def set_gtin(self, gtin):
+        """ Set ground truth file path
+
+        :param gtin: (string) Path to ground truth file
+        """
         self.GTIN = gtin
 
     def set_pdb_extn(self, pdbextn):
+        """ Set extension of pdb files
+
+        :param datadir: (string) directory with pdb files
+        """
         self.PDBEXTN = pdbextn
 
     def set_threads(self, threads):
+        """ Set number of threads to use
+
+        :param threads: (int) Number of threads to use
+        """
         self.THREADS = threads
 
     def set_weights(self, weights):
+        """ Set weights for PSC methods
+
+        :param weights: (string) Semi-colon separated list of weights
+        """
         self.WEIGHTS = weights
 
     def set_prog_dir(self, progdir):
+        """ Set path to PSC binaries
+
+        :param progdir: (string) Path to PSC program binaries
+        """
         self.PROGDIR = progdir
 
     def __repr__(self):
+        """ Return class members as string
+
+        :rtype: string 
+        """
         return str(self.__dict__)
 
 
@@ -198,6 +226,9 @@ def process():
 
 
 def main():
+    """ Main entry point of the utility created to complement the setup.py
+    based auto executable creation
+    """
     try:
         process()
         print('Done')
