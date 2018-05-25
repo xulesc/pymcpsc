@@ -18,10 +18,13 @@ Docker:
 
 docker build -t pymcpsc .
 
-docker run -v /home/asharma/workspace/spyder_workspace/pymcpsc/tests/:/usr/src/app/tests/ pymcpsc run-pymcpsc -d /usr/src/app/tests/chew_kedem_dataset/pdb_files/ -e pdb
+##docker run -v /home/asharma/workspace/spyder_workspace/pymcpsc/tests/:/usr/src/app/tests/ pymcpsc run-pymcpsc -d /usr/src/app/tests/chew_kedem_dataset/pdb_files/ -e pdb
 
-docker run pymcpsc python -c "import sys; print '\n'.join(sys.path)"
+##docker run pymcpsc python -c "import sys; print '\n'.join(sys.path)"
 
-docker run -v /home/asharma/phd/docker-test:/usr/shared pymcpsc:latest run-pymcpsc -e pdb -d /usr/shared/data/pdb_files -g /usr/shared/data/ground_truth_ck
+asharma@linchpin ~/phd/docker-test $ mkdir data
+asharma@linchpin ~/phd/docker-test $ cp -a ~/workspace/pymcpsc/tests/chew_kedem_dataset/pdb_files/ data/
+asharma@linchpin ~/phd/docker-test $ cp -a ~/workspace/pymcpsc/tests/chew_kedem_dataset/ground_truth_ck data/
+docker run -v /home/asharma/phd/docker-test:/usr/shared pymcpsc:latest /usr/src/app/scripts/docker-launch-pymcpsc.sh -e pdb -d /usr/shared/data/pdb_files -g /usr/shared/data/ground_truth_ck
 
 sphinx-apidoc ../pymcpsc/ -o source/
