@@ -2,6 +2,10 @@
 # license.  Please see the LICENSE.md file.
 """ Methods used for performing Multi-dimensional Scaling and generating
 scatter plots from the resulting coordinates.
+
+Functions:
+    - *cmdscale*: Classical multidimensional scaling (MDS)
+    - *mdsscatter*: Perform MDS followed by generating scatter plots
 """
 from __future__ import division
 
@@ -12,11 +16,8 @@ import matplotlib.pyplot as plt
 import os.path
 import pandas as pd
 import numpy as np
-from collections import defaultdict
 
 from sklearn.manifold import MDS
-
-import numpy.linalg as la
 
 _s = 20 * 2
 
@@ -25,25 +26,11 @@ matplotlib.rcParams['ps.fonttype'] = 42
 
 
 def cmdscale(D):
-    """
-    Classical multidimensional scaling (MDS)
+    """ Classical multidimensional scaling (MDS)
 
-    Parameters
-    ----------
-    D : (n, n) array
-        Symmetric distance matrix.
-
-    Returns
-    -------
-    Y : (n, p) array
-        Configuration matrix. Each column represents a dimension. Only the
-        p dimensions corresponding to positive eigenvalues of B are returned.
-        Note that each dimension is only determined up to an overall sign,
-        corresponding to a reflection.
-
-    e : (n,) array
-        Eigenvalues of B.
-
+    :param D: array (n, n) Symmetric distance matrix
+    :rtype: array (n, p) Configuration matrix. Each column represents a dimension. Only the p dimensions corresponding to positive eigenvalues of B are returned. Note that each dimension is only determined up to an overall sign, corresponding to a reflection.
+    :rtype: arry (n, ) Eigenvalues of B
     """
     # Number of points
     n = len(D)
@@ -71,50 +58,31 @@ def cmdscale(D):
     return Y, evals
 
 
-def nnclassify(p, colname, dom_class):
-    nnidxs = p.idxmin(axis=1)
-    return map(lambda x: int(dom_class[x]), nnidxs)
-
-
-def get_eig(A):
-    # square it
-    A = A**2
-
-    # centering matrix
-    n = A.shape[0]
-    J_c = 1. / n * (np.eye(n) - 1 + (n - 1) * np.eye(n))
-
-    # perform double centering
-    B = -0.5 * (J_c.dot(A)).dot(J_c)
-
-    # find eigenvalues and eigenvectors
-    eigen_val = la.eig(B)[0]
-    eigen_vec = la.eig(B)[1].T
-
-    idx = np.argsort(eigen_val)[::-1]
-    evals = eigen_val[idx]
-    evecs = eigen_vec[:, idx]
-
-    return evals[:2], evecs[:, :2]
-
-
-def dNNClassify(
+def mdsscatter(
         raw_data,
         classes,
         cl,
         classes_dict,
         cath_c_dict,
-        cath_a_dict,
-        cath_t_dict,
-        cath_h_dict,
-        rev_cath_t,
-        rev_cath_c,
-        rev_cath_a,
         colname,
         fill,
         thresh=0.0,
         outdir='outdir',
         n_jobs=16):
+    """ Performs MDS on pairwise similarity of a psc method in 2-dimensions
+    and generates scatter plot for it.
+
+    :param raw_data: (dataframe) Similarity scores data
+    :param classes: (list) SCOP classes     
+    :param cl: (list) Colors corresponding to the SCOP classes to be used in the plots
+    :param classes_dict: (dict) Mapping of class to index
+    :param cath_c_dict: (dict) Top level class to domain mapping
+    :param fill: (boolean) Value to use for missing data
+    :param thresh: (float) Threshold for similarity to exclude domain pairs
+    :param outdir: (string) Path to output directory where processed data files can be found
+    :param n_jobs: (int) Parallel processing for MDS calculation
+    :rtype: None
+    """
     matplotlib.rc('font', size=22)
 
     ODIR = 'figures'
@@ -140,27 +108,11 @@ def dNNClassify(
         o = mds.fit_transform(X)
         print('Stress (MDS minimizes this) of 2D emedding for %s: %f' %
               (colname, mds.stress_))
-        # print get_eig(X)
-        # Y, evals = cmdscale(X)
-        # print o
-        # print Y
-        # print evals
-        # o = Y[:,:2]
-        # o1 = PCA(n_components=2)
-        # o1.fit(X)
-        # print 'Variance explained by 2D emedding for %s: %f (variance explained)' %(colname, sum(o1.explained_variance_ratio_))
-    # p_Y_c = nnclassify(dom_dist, colname, cath_c_dict)
-    # print sum(np.absolute(np.array(Y_c) - np.array(p_Y_c)))
-    # plt.scatter(o[:, 0], o[:, 1], c=map(lambda x: cl[x], p_Y_c), s=_s)
-    # plt.savefig(
-    #    '%s%s%s_mds_scatter_nn.png' %
-    #    (ODIR, os.path.sep, colname))
-    # plt.close()
+
     plt.scatter(o[:, 0], o[:, 1], c=list(map(lambda x: cl[x], Y_c)), s=_s)
     plt.savefig('%s%s%s_mds_scatter.png' %
                 (ODIR, os.path.sep, colname))
     plt.close()
-#
 
 
 def make(
@@ -170,23 +122,23 @@ def make(
     """ Manages creation of MDS based scatter plots. Reades in pairwise domain
     PSC and MCPSC scores from a file. MDS followed by scatter plots are then
     generated for each PSC method.
+
+    :param outdir: (string) Path to output directory where processed data files can be found
+    :param n_jobs: (int) Number of parallel threads that can be used for the MDS step
+    :param psc_cols: (list) List of psc method names to be included in mean calculations
+    :rtype: None
     """
     raw_data = pd.read_csv(
         '%s%sprocessed.imputed.mcpsc.csv' %
         (outdir, os.path.sep))
 
-    # print raw_data.shape
-    # Make dicts
-    # print 'make dicts'
     cl = list('bgrcmykkkkk')
     classes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k']  # SCOP
-    # classes = ['1','2','3','4'] # CATH
+
     classes_dict = dict(zip(classes, range(len(classes))))
     cath_c_dict = dict()
     idx = 0
     cath_a_dict = dict()
-    cath_t_dict = dict()
-    cath_h_dict = dict()
     for line in open(
         '%s%sprocessed.imputed.mcpsc.csv' %
             (outdir, os.path.sep)):
@@ -197,43 +149,18 @@ def make(
         d = data[4].split('.')
         cath_c_dict[data[2]] = classes_dict[d[0]]
         cath_a_dict[data[2]] = '.'.join(d[:2])
-        cath_t_dict[data[2]] = '.'.join(d[:3])
-        cath_h_dict[data[2]] = data[4]
-
-    # print 'reverse topology map'
-    rev_cath_t = defaultdict(list)
-    for k, v in cath_t_dict.items():
-        rev_cath_t[v].append(k)
-    # print len(rev_cath_t)
-
-    rev_cath_a = defaultdict(list)
-    for k, v in cath_a_dict.items():
-        rev_cath_a[v].append(k)
-    # print len(rev_cath_t)
-
-    # print 'reverse class map'
-    rev_cath_c = defaultdict(list)
-    for k, v in cath_c_dict.items():
-        rev_cath_c[v].append(k)
-    # print len(rev_cath_c)
 
     print('Make MDS scatter plots')
     for x in list(map(lambda x: '%s_fill_mean' %
                       x, psc_cols)) + list(map(lambda x: 'mcpsc_fill_%d' %
                                                x, range(5))) + ['mcpsc_fill_median']:
         try:
-            dNNClassify(
+            mdsscatter(
                 raw_data,
                 classes,
                 cl,
                 classes_dict,
                 cath_c_dict,
-                cath_a_dict,
-                cath_t_dict,
-                cath_h_dict,
-                rev_cath_t,
-                rev_cath_c,
-                rev_cath_a,
                 x,
                 1,
                 0,

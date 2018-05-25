@@ -2,6 +2,14 @@
 # license.  Please see the LICENSE.md file.
 """ Methods for leave-one-out nearest neighbor classification with pairwise
 similiarty score matrices.
+
+Functions:
+    - *_nnclassifyacc*: Calculates the nearest neighbor for each domain by creating a pivot table.
+    - *nnclassifyacc*: Calculates the performance of nearest neighbor classifier.
+    - *multi_nnclassifyacc*:
+    - *make*: main entry method
+    
+Leave-one-out nearest neighbor analysis accuracy performances of classifiers built with PSC and MCPSC scores.
 """
 import os
 import pandas as pd
@@ -9,8 +17,17 @@ from collections import Counter
 
 
 def _nnclassifyacc(df, colname):
+    """Calculates the nearest neighbor for each domain by creating a pivot table.
+
+    :param df: (dataframe) Dataframe containing pairwise similarity scores of domains
+    :param colname: (list) PSC method for which the nearest neighbors are to be calculated
+    :rtype: (list) Domain pairs and corresponding scores where the pairs are nearest neighbors
+    """
+    # create pivot table from domain pairs
     p = df.pivot(index='dom1', columns='dom2', values=colname)
+    # find the column with max value for each row
     nnidxs = p.idxmax(axis=1)
+    # find the score corresponding to nearest neighbor pairs
     scores = []
     for d1, d2 in zip(nnidxs.index, nnidxs):
         scores.append(p[d1][d2])
@@ -18,10 +35,15 @@ def _nnclassifyacc(df, colname):
 
 
 def nnclassifyacc(df, colname, klass):
+    """Calculates the performance of nearest neighbor classifier.
+
+    :param df: (dataframe) Dataframe containing pairwise similarity scores of domains
+    :param colname: (list) PSC method for which the nearest neighbors are to be calculated
+    :param klass: (dict) Key-value pair of domain and their classifications.
+    :rtype: (float) Accuracy
+    """
     try:
-        # print df.shape
         dfi = df.dropna(subset=[colname])
-        # print dfi.shape
         total = len(dfi['dom1'].unique())
         correct = 0
         for dom1, dom2, s in _nnclassifyacc(dfi, colname):
@@ -31,42 +53,19 @@ def nnclassifyacc(df, colname, klass):
         return 0
 
 
-def multi_nnclassifyacc(df, colnames, klass):
-    ret = []
-    for colname in colnames:
-        r = _nnclassifyacc(df.dropna(subset=[colname]), colname)
-        dmap = dict(map(lambda x: (x[0], (x[1], x[2])), r))
-        ret.append(dmap)
-    dlist = df['dom1'].unique()
-    correct = 0
-    for q in dlist:
-        ds = []
-        ss = []
-        for e in ret:
-            if e.get(q):
-                v = e[q]
-                ds.append(v[0])
-                ss.append(v[1])
-        if len(ds) == 0:
-            continue
-        cnt = Counter(ds)
-        cntl = list(cnt.iteritems())
-        # if no clear winner pick one with top score
-        if len(cnt) > 1 and cntl[0][1] == cntl[1][1]:
-            s = sorted(zip(ds, ss), key=lambda x: x[1], reverse=True)
-            d = s[0][0]
-        else:
-            d = Counter(ds).most_common(1)[0][0]
-        correct += klass[q] == klass[d]
-    return correct * 1.0 / len(dlist)
-
-
 def make(
     outdir='outdir', do_user_mcpsc=True,
         psc_cols=[]):
     """ Generates leave-one-out nearest neighbor analysis accuracy performances of
     classifiers built with PSC and MCPSC scores.
+
+    :param outdir: (string) Path to output directory where processed data files can be found
+    :param do_user_mcpsc: (boolean) Include/Exclude user weights based consensus scores
+    :param psc_cols: (list) List of psc method names to be included in mean calculations
+    :rtype: None
     """
+
+    # define column names for which nn performance is to be calculated
     imputed_cols = map(lambda x: '%s_fill_mean' % x, psc_cols)
     if do_user_mcpsc:
         mcpsc_cols = [
@@ -82,10 +81,12 @@ def make(
             'mcpsc_fill_2',
             'mcpsc_fill_3']
 
+    # read the similarity scores data
     full_psc_data = pd.read_csv(
         '%s%sprocessed.imputed.mcpsc.csv' %
         (outdir, os.path.sep))
 
+    # create the domain-classification maps
     d2l1 = {}
     d2l2 = {}
     d2l3 = {}
@@ -97,6 +98,8 @@ def make(
         d2l3[d] = '.'.join(s[:3])
         d2l4[d] = '.'.join(s[:4])
 
+    # build NNs for the three datasets and all PSC methods and calculate
+    # performance
     print('Nearest Neighbor Performances')
     print('\% original psc methods')
     for method in psc_cols:

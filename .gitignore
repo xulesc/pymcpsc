@@ -3,3 +3,6 @@ README.pdf
 docs/build
 .spyproject/
 &.pyc
+build/
+dist/
+pymcpsc.egg-info/

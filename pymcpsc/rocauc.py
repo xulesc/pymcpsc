@@ -2,6 +2,12 @@
 # license.  Please see the LICENSE.md file.
 """ Methods for generating performance ROCs and data files for mixed ROC
 creation.
+
+Functions:
+    - *makerocpercol*: creates ROC data for a psc method
+    - *metrics_auc*: calculate AUC for given ROC data
+    - *plot*: generate and store ROC plot
+    - *make*: main entry method
 """
 import matplotlib
 matplotlib.use('Agg')
@@ -16,6 +22,12 @@ matplotlib.rcParams['ps.fonttype'] = 42
 
 
 def makerocpercol(dataFrame, colname):
+    """ Creates ROC data for a psc method
+
+    :param dataFrame: (dataframe) Pairwise similarity scores data
+    :param colname: (string) Name of the column to calculate ROC data
+    :rtype: (list) ROC data
+    """
     df = dataFrame.dropna(subset=[colname])
     if len(df) == 0:
         return (None, None, None)
@@ -26,6 +38,12 @@ def makerocpercol(dataFrame, colname):
 
 
 def metrics_auc(fpr, tpr):
+    """ Calculate AUC for given ROC data
+
+    :param fpr: (list) False positive rates
+    :param tpr: (list) True positive rates
+    :rtype: (float) ROC-AUC
+    """
     try:
         return metrics.auc(fpr, tpr)
     except:
@@ -34,6 +52,13 @@ def metrics_auc(fpr, tpr):
 
 
 def plot(roc_data, auc_data, colnames, path):
+    """ Generate and store ROC plot
+
+    :param roc_data: (matrix) ROC data
+    :param auc_data: (list) ROC-AUC data
+    :param colname: (string) PSC method name to be put on chart
+    :param path: (string) Path where plot is to be saved
+    """
     matplotlib.rc('font', size=22)
 
     for i in range(len(colnames)):
@@ -57,6 +82,11 @@ def make(
         psc_cols=[]):
     """ Generates ROCs for performance of the PSC methods. Also generates data files
     required for generating mixed ROCs.
+
+    :param outdir: (string) Path to output directory where processed data files can be found
+    :param do_user_mcpsc: (boolean) Include/Exclude user weights based consensus scores
+    :param psc_cols: (list) List of psc method names to be included in mean calculations
+    :rtype: None    
     """
     if do_user_mcpsc:
         mcpsc_cols = [
@@ -79,7 +109,7 @@ def make(
     if not os.path.exists('figures'):
         os.makedirs('figures')
 
-    # ROC/AUC at Topology Level
+    # ROC/AUC at Topology/Fold Level
     full_psc_data['klass1'] = full_psc_data[['cath1']].apply(
         lambda x: '.'.join(x[0].split('.')[:3]), axis=1)
     full_psc_data['klass2'] = full_psc_data[['cath2']].apply(

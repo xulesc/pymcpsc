@@ -7,6 +7,38 @@ Script to be executed for running pyMCPSC. The software must first have been
 installed on the system. On load the script looks for run_gui-args.json file
 to find and load user specified parameters from a previous run. On execution
 start a copy of the user parameters are written to the run_gui-args.json file.
+
+Classes:
+    - *CONF*- pyMCPSC configuration storage class
+
+Functions:
+    - *process* - main processing sequence of the program
+    - *main* - entrypoint to pymcpsc for deployment 
+    
+Directly calling this script is one way in which pyMCPSC can be executed. Usage
+details are as follows:
+    
+run-pymcpsc [-h] [-e PDBEXTN] [-d DATADIR] [-g GTIN] [-t THREADS]
+                   [-w WEIGHTS] [-p PROGDIR]
+
+Run pyMCPSC.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -e PDBEXTN, --pdbextn PDBEXTN
+                        Extension of the PDB files (default: ent)
+  -d DATADIR, --datadir DATADIR
+                        Directory containing the PDB files (default: proteus
+                        dataset)
+  -g GTIN, --gtin GTIN  Ground truth file (default: proteus dataset)
+  -t THREADS, --threads THREADS
+                        Number of threads to use (default: 6)
+  -w WEIGHTS, --weights WEIGHTS
+                        Weights assigned to PSC methods (default:
+                        2.55,1.79,4.23,14.36,-0.38)
+  -p PROGDIR, --progdir PROGDIR
+                        Directory containing the PSC binaries (default: pre
+                        packed)
 """
 import os
 import sys
@@ -163,10 +195,6 @@ def process():
     print("Making Phylogenetic Trees")
     phylotree(conf.OUTDIR, conf.WORKDIR, psc_cols=psc_methods, psc_names=psc_method_names)
     print("Done")
-
-
-def onexit(param):
-    print('exiting ', param)
 
 
 def main():

@@ -1,6 +1,21 @@
 # This code is part of the pymcpsc distribution and governed by its
 # license.  Please see the LICENSE.md file.
 """ Classes for pairwise PSC using different methods.
+
+Classes:
+    - *GRALIGN_PRE_PROCESSOR*: run preprocessing step for GR-align
+    - *CE_HANDLER*: pairwise ce execution handler
+    - *TM_HANDLER*: pairwise tm-align execution handler
+    - *FAST_HANDLER: pairwise fast execution handler
+    - *GR_HANDLER*: gr-align execution handler
+    - *USM_HANDLER*: pairwise usm execution handler
+    - *RunPairwisePSC*: main execution class for generating pairwise PSC scores
+    
+Functions:
+    - *fast_process_pair*: convinience wrapper for fast pairwise processing
+    - *usm_process_pair*: convinience wrapper for usm pairwise processing
+    - *tm_process_pair*: convinience wrapper for tm-align pairwise processing
+    - *ce_process_pair*: convinience wrapper for ce pairwise processing
 """
 import sys
 import os
@@ -18,6 +33,13 @@ from time import sleep
 class GRALIGN_PRE_PROCESSOR:
 
     def __init__(self, binPath1, binPath2, tmpDir):
+        """ Set paths for the class
+
+        :param binPath1: (string) Path to CMap binary
+        :param binPath2: (string) Path to Dcount binary
+        :param tmpDir: (string) Path where intermediate processing files may be stored
+        :rtype: None
+        """
         self._binPath1 = os.path.abspath(binPath1)
         self._binPath2 = os.path.abspath(binPath2)
         self._tmpDir = '%s%sgralign' % (tmpDir, os.path.sep)
@@ -25,6 +47,13 @@ class GRALIGN_PRE_PROCESSOR:
             os.makedirs(self._tmpDir)
 
     def pre_process_all_to_all(self, pdbDir, pdbextn):
+        """ Execute the pre-processing steps of GR-align that generate the 
+        contact maps used for generating similarity scores.
+
+        :param pdbDir: (string) Path where PDB files are stored
+        :param pdbextn: (string) The extension of PDB files
+        :rtype: None
+        """
         for file1 in os.listdir(pdbDir):
             # ./CMap -i 1amk.pdb -c A -o 1amkA.gw -d 12.0
             # ./DCount -i 1amkA.gw -o 1amkA.ndump
@@ -74,12 +103,25 @@ class GRALIGN_PRE_PROCESSOR:
 class CE_HANDLER:
 
     def __init__(self, binPath, tmpDir):
+        """ Set paths for the class
+
+        :param binPath: Path to ce binary
+        :param tmpDir: Path for storing intermediate files
+        :rtype: None
+        """
         self._binPath = os.path.abspath(binPath)
         self._tmpDir = tmpDir
         if not os.path.exists(self._tmpDir):
             os.makedirs(self._tmpDir)
 
     def process_pair(self, fname1, fname2, pdbextn):
+        """ Process a pair of domains using the CE external binary
+
+        :param fname1: (string) Path to file containing structure of domain 1
+        :param fname2: (string) Path to file containing structure of domain 2
+        :param pdbextn: (string) Extension of PDB files
+        :rtype: (list) Output data collected from CE execution
+        """
         # note special requirement for pom/mkDB from exec location
         # ./CE - $PDB_DIR/$1 - $PDB_DIR/$2 - $TMP_DIR
         f1 = fname1.split(os.path.sep)[-1].replace(pdbextn, '')
@@ -136,9 +178,20 @@ class CE_HANDLER:
 class TM_HANDLER:
 
     def __init__(self, binPath):
+        """ Set paths for the class
+
+        :param binPath: Path to ce binary
+        :rtype: None
+        """
         self._binPath = os.path.abspath(binPath)
 
     def process_pair(self, fname1, fname2, pdbextn):
+        """ Process a pair of domains using the TM-align external binary
+
+        :param fname1: (string) Path to file containing structure of domain 1
+        :param fname2: (string) Path to file containing structure of domain 2
+        :rtype: (list) Output data collected from CE execution
+        """
         # ./$prg $dir/$x $dir/$y
         cmd = '%s %s %s' % (self._binPath, fname1, fname2)
         proc = subprocess.Popen(
@@ -173,10 +226,22 @@ class TM_HANDLER:
 class FAST_HANDLER:
 
     def __init__(self, binPath):
+        """ Set paths for the class
+
+        :param binPath: Path to ce binary
+        :rtype: None
+        """
         self._binPath = os.path.abspath(binPath)
 
     def process_pair(self, fname1, fname2, pdbextn):
-        cmd = '%s %s %s' % (self._binPath, fname1, fname2)  # ; print cmd
+        """ Process a pair of domains using the FAST external binary
+
+        :param fname1: (string) Path to file containing structure of domain 1
+        :param fname2: (string) Path to file containing structure of domain 2
+        :param pdbextn: (string) Extension of PDB files
+        :rtype: (list) Output data collected from FAST execution
+        """
+        cmd = '%s %s %s' % (self._binPath, fname1, fname2)
         proc = subprocess.Popen(
             cmd,
             shell=True,
@@ -192,19 +257,25 @@ class FAST_HANDLER:
                            data[3].split('=')[1],
                            data[4].split('=')[1],
                            data[5].split('=')[1]]
-        # with lock:
-        #  ofile.write('%s\n' %' '.join(ret[0]))
-        # each entry of res: fname1, fname2, len1, len2, rmsd
         return ret
 
 
 class GR_HANDLER:
 
     def __init__(self, binPath):
+        """ Set paths for the class
+
+        :param binPath: Path to ce binary
+        :rtype: None
+        """
         self._binPath = os.path.abspath(binPath)
 
     def process_alltoall(self, dirName):
-        #
+        """ Process all pairs of domains using the GR-align external binary
+
+        :param dirName: (string) Path to contact map files
+        :rtype: None
+        """
         q = '%s%spairs.lst' % (dirName, os.path.sep)
         f = open(q, 'w')
         for file1 in list(filter(
@@ -231,15 +302,30 @@ class GR_HANDLER:
 class USM_HANDLER:
 
     def __init__(self):
+        """ Set maximum number of contacts to keep in contact map
+
+        :rtype: None
+        """
         self._MAX_CONTACTS = 1000
 
     def _trunc(self, x):
+        """ Truncate contacts to max size
+
+        :param x: (list) Contacts
+        :rtype: (list) Contacts truncated to max size
+        """
         if len(x) < self._MAX_CONTACTS:
             return x
         return x[:self._MAX_CONTACTS]
 
     def process_pair(self, fname1, fname2):
-        reader = lambda x: not x.startswith('|')
+        """ Process a pair of domains using USM
+
+        :param fname1: (string) Path to domain 1 contact map file
+        :param fname2: (string) Path to domain 2 contact map file
+        :rtype: (list) Output data collected from USM execution
+        """
+        def reader(x): return not x.startswith('|')
         cm1 = ''.join(
             self._trunc(
                 list(
@@ -253,9 +339,9 @@ class USM_HANDLER:
                         reader,
                         open(fname2).readlines()))))
         if sys.version_info < (3, 0):
-            comp = lambda x: float(len(zlib.compress(x)))
+            def comp(x): return float(len(zlib.compress(x)))
         else:
-            comp = lambda x: float(len(zlib.compress(x.encode('utf-8'))))
+            def comp(x): return float(len(zlib.compress(x.encode('utf-8'))))
         x = comp(cm1)
         y = comp(cm2)
         xy = comp(cm1 + cm2)
@@ -268,6 +354,11 @@ class USM_HANDLER:
 
 
 def fast_process_pair(ps):
+    """ Convinience wrapper for fast pairwise processing
+
+    :param ps: tuple containing object to call and data to call it with
+    :rtype: (list) program output
+    """
     try:
         return ps[0].process_pair(ps[1][0], ps[1][1], ps[1][2])
     except KeyboardInterrupt:
@@ -275,6 +366,11 @@ def fast_process_pair(ps):
 
 
 def usm_process_pair(ps):
+    """ Convinience wrapper for usm pairwise processing
+
+    :param ps: tuple containing object to call and data to call it with
+    :rtype: (list) program output
+    """
     try:
         return ps[0].process_pair(ps[1][0], ps[1][1])
     except KeyboardInterrupt:
@@ -282,6 +378,11 @@ def usm_process_pair(ps):
 
 
 def tm_process_pair(ps):
+    """ Convinience wrapper for tm-align pairwise processing
+
+    :param ps: tuple containing object to call and data to call it with
+    :rtype: (list) program output
+    """
     try:
         return ps[0].process_pair(ps[1][0], ps[1][1], ps[1][2])
     except KeyboardInterrupt:
@@ -289,6 +390,11 @@ def tm_process_pair(ps):
 
 
 def ce_process_pair(ps):
+    """ Convinience wrapper for ce pairwise processing
+
+    :param ps: tuple containing object to call and data to call it with
+    :rtype: (list) program output
+    """
     try:
         return ps[0].process_pair(ps[1][0], ps[1][1], ps[1][2])
     except KeyboardInterrupt:
@@ -301,6 +407,10 @@ class RunPairwisePSC:
         pass
 
     def run(self, config=None):
+        """ Main pairwise psc processing function
+
+        :param config: (Config) Paths and settings to use during PSC processing
+        """
         PROGRAMS = ['ce', 'tmalign', 'fast', 'gralign', 'usm']
 
         if config is None:
@@ -394,6 +504,15 @@ class RunPairwisePSC:
                 threads,
                 pscmethod,
                 methodname):
+            """ Execute job list in parallel using Pool
+
+            :param outfilename: (string)
+            :param procmethod: PSC convinience method to call
+            :param pairs: (list) Pairs of domains to be processed
+            :param pscmethod: (object) PSC handler object
+            :param methodname: (string) PSC method name string
+            :rtype: (boolean) 
+            """
             start = timer()
             p = Pool(threads)
             mlen = len(pairs) - 1
@@ -431,6 +550,8 @@ class RunPairwisePSC:
             out.close()
             return timer() - start
 
+        # Run multi-threaded jobs for pairwise PSC processing of the
+        # PSC methods
         usm_seconds = doMulti(
             '%s%susm_results.txt' %
             (WORKDIR,
@@ -488,6 +609,7 @@ class RunPairwisePSC:
         return True
 
         # END OF PROCESS
+
 
 if __name__ == '__main__':
     RunPairwisePSC().run()
