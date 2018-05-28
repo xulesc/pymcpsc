@@ -150,3 +150,20 @@ def make(
         for dmap in [d2l1, d2l2, d2l3, d2l4]:
             perfs.append('%0.2f' % nnclassifyacc(full_psc_data, method, dmap))
         print(' & '.join([method] + perfs) + ' \\\hline')
+
+    # mcpsc_full_median,mcpsc_fill_median
+    print('\% original median')
+    perfs = ['mcpsc_full_median']
+    for dmap in [d2l1, d2l2, d2l3, d2l4]:
+        perfs.append(nnclassifyacc(full_psc_data, 'mcpsc_full_median', dmap))
+    print(' & '.join(perfs) + ' \\\hline')
+    print('\% common subset median')
+    perfs = ['mcpsc_full_median']
+    for dmap in [d2l1, d2l2, d2l3, d2l4]:
+        perfs.append(nnclassifyacc(full_psc_data.dropna(subset=psc_col), 'mcpsc_full_median', dmap))
+    print(' & '.join(perfs) + ' \\\hline')
+    print('\% imputed median')
+    perfs = ['mcpsc_fill_median']
+    for dmap in [d2l1, d2l2, d2l3, d2l4]:
+        perfs.append(nnclassifyacc(full_psc_data, 'mcpsc_fill_median', dmap))
+    print(' & '.join(perfs) + ' \\\hline')
