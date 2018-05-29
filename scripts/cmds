@@ -28,3 +28,9 @@ asharma@linchpin ~/phd/docker-test $ cp -a ~/workspace/pymcpsc/tests/chew_kedem_
 docker run -v /home/asharma/phd/docker-test:/usr/shared pymcpsc:latest /usr/src/app/scripts/docker-launch-pymcpsc.sh -e pdb -d /usr/shared/data/pdb_files -g /usr/shared/data/ground_truth_ck
 
 sphinx-apidoc ../pymcpsc/ -o source/
+
+
+for call graph run in source dir (py3)
+
+asharma@linchpin ~/workspace/pymcpsc/pymcpsc $ ~/workspace/pyan/pyan.py *.py --uses --no-defines --colored --grouped --annotated --dot >myuses.dot
+asharma@linchpin ~/workspace/pymcpsc/pymcpsc $ dot -Tsvg myuses.dot >myuses.svg
