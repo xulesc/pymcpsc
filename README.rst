@@ -47,7 +47,7 @@ This process will take a little time, depending on your local machine and networ
 Native installation
 -------------------
 
-This installation mode is releveant to developers who wish to extend pyMCPSC and works only on Linux based systems. Before pyMCPSC is installed the dependencies of pyMCPSC must be made available. The suggested route is to use the Anaconda/Miniconda platform which has a higher success rate across Linux systems, however, it is certainly possible to install the dependencies independently of the platform. We currently recommend using Python 2.7, Python 3.5 or Python 3.6 as we have only tested with these versions of Python. 
+This installation mode is releveant to developers who wish to extend pyMCPSC and **works only on Linux based systems**. Before pyMCPSC is installed the dependencies of pyMCPSC must be made available. The suggested route is to use the Anaconda/Miniconda platform which has a higher success rate across Linux systems, however, it is certainly possible to install the dependencies independently of the platform. We currently recommend using Python 2.7, Python 3.5 or Python 3.6 as we have only tested with these versions of Python. 
 
 
 With Miniconda

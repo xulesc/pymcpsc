@@ -26,6 +26,18 @@ As a software architecture, pyMCPSC is organized into several modules called in 
 
    pyMCPSC is organized into several modules, each one implementing a specific functionality. The call graph of methods and modules shows the interaction between the main entry point run_pymcpsc and the other modules with partial functionality. Similarity scores are generated for all protein pairs using the executable binaries of the included PSC methods. Subsequently the scores are scaled, missing data (similarity scores) are imputed and consensus MCPSC scores are calculated for all domain pairs. If the user has supplied ground-truth domain classification information, then comparative analysis results are also generated based on the similarity scores.
 
+Building this documentation
+===========================
+
+It is possible to update and build this documentation if you have the full 
+sources of pyMCPSC. In order to do so navigate to the docs folder in pyMCPSC
+and issue the command::
+
+    make html
+
+Note your system will need to have the *make* toolchain, sphinx and the
+sphinx_rtd_theme theme installed.
+
 Indices and tables
 ==================
 
