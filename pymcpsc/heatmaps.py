@@ -12,6 +12,9 @@ domains level and one at the fold level.
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+
+plt.rc('legend', fontsize='small')
 
 import pandas as pd
 import numpy as np
@@ -53,6 +56,9 @@ def generate_heatmaps(
 
     # assign colors to SCOP classes
     dom_color = {'a': 'b', 'b': 'g', 'c': 'r', 'd': 'c', 'e': 'b'}
+    class_colours = ['b', 'g', 'r', 'c']
+    classes = ['SCOP Class A', 'SCOP Class B', 'SCOP Class C', 'SCOP Class D']
+    legend_TN = [mpatches.Patch(color=c, label=l) for c, l in zip(class_colours, classes)]
 
     fold_pair_distances_df = pd.DataFrame(fold_pair_distances)
     fold_pair_distances_df.columns = ['fold1', 'fold2', 'd']
@@ -71,6 +77,7 @@ def generate_heatmaps(
                     j.split('.')[0]]) for i, j in zip(
                 plt.gca().get_yticklabels(), reversed(
                     p1.columns))]
+        ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
         plt.tight_layout()
         fig.savefig('figures%s%s_fold_heatmap.png' % (os.path.sep, colname))
         plt.close(fig)
@@ -97,6 +104,7 @@ def generate_heatmaps(
                 dom_color[
                     dom_classification[j][0]]) for i, j in zip(
                 plt.gca().get_yticklabels(), reversed(sorted_dom))]
+        ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
         plt.tight_layout()
         fig.savefig('figures%s%s_dom_heatmap.png' % (os.path.sep, colname))
         plt.close(fig)

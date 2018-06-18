@@ -12,6 +12,7 @@ from __future__ import division
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 import os.path
 import pandas as pd
@@ -23,6 +24,7 @@ _s = 20 * 2
 
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
+plt.rc('legend', fontsize='xx-small')
 
 
 def cmdscale(D):
@@ -110,6 +112,14 @@ def mdsscatter(
               (colname, mds.stress_))
 
     plt.scatter(o[:, 0], o[:, 1], c=list(map(lambda x: cl[x], Y_c)), s=_s)
+    print('making legend')
+    class_colours = ['b', 'g', 'r', 'c']
+    classes = ['SCOP Class A', 'SCOP Class B', 'SCOP Class C', 'SCOP Class D']
+    recs = []
+    for i in range(0, len(class_colours)):
+        recs.append(mpatches.Rectangle((0, 0), 1, 1, fc=class_colours[i]))
+    plt.legend(recs, classes, loc=4)
+
     plt.savefig('%s%s%s_mds_scatter.png' %
                 (ODIR, os.path.sep, colname))
     plt.close()
