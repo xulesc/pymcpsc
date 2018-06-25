@@ -112,7 +112,7 @@ def mdsscatter(
               (colname, mds.stress_))
 
     plt.scatter(o[:, 0], o[:, 1], c=list(map(lambda x: cl[x], Y_c)), s=_s)
-    print('making legend')
+    #print('making legend')
     class_colours = ['b', 'g', 'r', 'c']
     classes = ['SCOP Class A', 'SCOP Class B', 'SCOP Class C', 'SCOP Class D']
     recs = []
