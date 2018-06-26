@@ -231,7 +231,7 @@ def main():
     """
     try:
         process()
-        print('Done')
+        print('pymcpsc completed')
     except (KeyboardInterrupt, SystemExit):
         sys.exit(-1)
 
