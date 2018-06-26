@@ -34,3 +34,16 @@ for call graph run in source dir (py3)
 
 asharma@linchpin ~/workspace/pymcpsc/pymcpsc $ ~/workspace/pyan/pyan.py *.py --uses --no-defines --colored --grouped --annotated --dot >myuses.dot
 asharma@linchpin ~/workspace/pymcpsc/pymcpsc $ dot -Tsvg myuses.dot >myuses.svg
+
+List all containers (only IDs)
+
+docker ps -aq
+Stop all running containers
+
+docker stop $(docker ps -aq)
+Remove all containers
+
+docker rm $(docker ps -aq)
+Remove all images
+
+docker rmi $(docker images -q)
