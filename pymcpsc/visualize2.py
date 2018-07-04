@@ -24,8 +24,6 @@ _s = 20 * 2
 
 matplotlib.rcParams['pdf.fonttype'] = 42
 matplotlib.rcParams['ps.fonttype'] = 42
-plt.rc('legend', fontsize='xx-small')
-
 
 def cmdscale(D):
     """ Classical multidimensional scaling (MDS)
@@ -110,6 +108,8 @@ def mdsscatter(
         o = mds.fit_transform(X)
         print('Stress (MDS minimizes this) of 2D emedding for %s: %f' %
               (colname, mds.stress_))
+              
+    print(o.shape)
 
     plt.scatter(o[:, 0], o[:, 1], c=list(map(lambda x: cl[x], Y_c)), s=_s)
     #print('making legend')
@@ -117,8 +117,8 @@ def mdsscatter(
     classes = ['SCOP Class A', 'SCOP Class B', 'SCOP Class C', 'SCOP Class D']
     recs = []
     for i in range(0, len(class_colours)):
-        recs.append(mpatches.Rectangle((0, 0), 1, 1, fc=class_colours[i]))
-    plt.legend(recs, classes, loc=4)
+        recs.append(mpatches.Rectangle((0, 0), 0.5, 0.5, fc=class_colours[i], alpha=0.5))
+    plt.legend(recs, classes, loc=4, ncol=2, fontsize=8, framealpha=0.5)
 
     plt.savefig('%s%s%s_mds_scatter.png' %
                 (ODIR, os.path.sep, colname))
