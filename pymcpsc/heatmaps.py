@@ -14,7 +14,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-plt.rc('legend', fontsize='small')
+#plt.rc('legend', fontsize='small')
 
 import pandas as pd
 import numpy as np
@@ -77,7 +77,8 @@ def generate_heatmaps(
                     j.split('.')[0]]) for i, j in zip(
                 plt.gca().get_yticklabels(), reversed(
                     p1.columns))]
-        ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
+        #ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
+        ax.legend(loc=4, ncol=4, bbox_to_anchor=(1.1, -0.25), handles=legend_TN, frameon=True)
         plt.tight_layout()
         fig.savefig('figures%s%s_fold_heatmap.png' % (os.path.sep, colname))
         plt.close(fig)
@@ -104,7 +105,8 @@ def generate_heatmaps(
                 dom_color[
                     dom_classification[j][0]]) for i, j in zip(
                 plt.gca().get_yticklabels(), reversed(sorted_dom))]
-        ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
+        #ax.legend(loc='best', bbox_to_anchor=(1.01, 0.85), handles=legend_TN, frameon=True)
+        #ax.legend(loc=4, ncol=4, handles=legend_TN, frameon=True)
         plt.tight_layout()
         fig.savefig('figures%s%s_dom_heatmap.png' % (os.path.sep, colname))
         plt.close(fig)
