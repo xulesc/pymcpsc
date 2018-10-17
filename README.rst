@@ -240,4 +240,4 @@ This work was supported by a research grant, European Union (European Social Fun
 
 References
 ==========
-- If you use pyMCPSC please cite: Sharma A, Manolakos ES (2018) Multi-criteria protein structure comparison and structural similarities analysis using pyMCPSC. PLoS ONE 13(10): e0204587. https://doi.org/10.1371/journal.pone.0204587
+- If you use pyMCPSC please cite: Sharma A, Manolakos ES (2018). "Multi-criteria protein structure comparison and structural similarities analysis using pyMCPSC". PLoS ONE 13(10): e0204587. https://doi.org/10.1371/journal.pone.0204587
