@@ -238,6 +238,6 @@ Acknowledgements
 
 This work was supported by a research grant, European Union (European Social Fund ESF) and Greek national funds, through the Operational Program "Education and Lifelong Learning" of the National Strategic Reference Framework (NSRF) - Research Funding Program "Heracleitus II" (grant number: 70/3/10929) under the supervision of Prof. Elias S. Manolakos (PI), Information Technologies in Medicine and Biology,  Dept. of Informatics and Telecommunications, University of Athens.
 
-References
-==========
-- If you use pyMCPSC please cite: Sharma A, Manolakos ES (2018). "Multi-criteria protein structure comparison and structural similarities analysis using pyMCPSC". PLoS ONE 13(10): e0204587. https://doi.org/10.1371/journal.pone.0204587
+How to cite
+===========
+If you use pyMCPSC please cite: Sharma A, Manolakos ES (2018). "Multi-criteria protein structure comparison and structural similarities analysis using pyMCPSC". PLoS ONE 13(10): e0204587. https://doi.org/10.1371/journal.pone.0204587
