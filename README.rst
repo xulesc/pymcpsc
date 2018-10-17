@@ -236,7 +236,7 @@ Known Issues
 Acknowledgements
 ================
 
-This work was supported by a research grant, European Union (European Social Fund ESF) and Greek national funds, through the Operational Program "Education and Lifelong Learning" of the National Strategic Reference Framework (NSRF) - Research Funding Program "Heracleitus II" (grant number: 70/3/10929) under the supervision of Prof. Elias S. Manolakos (PI), Information Technologies in Medicine and Biology Dept. of Informatics and Telecommunications, University of Athens.
+This work was supported by a research grant, European Union (European Social Fund ESF) and Greek national funds, through the Operational Program "Education and Lifelong Learning" of the National Strategic Reference Framework (NSRF) - Research Funding Program "Heracleitus II" (grant number: 70/3/10929) under the supervision of Prof. Elias S. Manolakos (PI), Information Technologies in Medicine and Biology,  Dept. of Informatics and Telecommunications, University of Athens.
 
 References
 ==========
