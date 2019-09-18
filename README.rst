@@ -1,4 +1,4 @@
-Note: The repository is no longer maintained here and has been moved to GitLab_.
+**Note:** The repository has been moved to GitLab_ and is no longer maintained here.
 
 .. _GitLab: https://gitlab.com/ManolakosLab/pymcpsc/
 
