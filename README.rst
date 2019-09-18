@@ -1,4 +1,4 @@
-** Note: The repository has been relocated to `GitLab<https://gitlab.com/ManolakosLab/pymcpsc>` and will no longer be maintained here. **
+** Note: The repository has been relocated to `GitLab<https://gitlab.com/ManolakosLab/pymcpsc>`_ and will no longer be maintained here. **
 
 pyMCPSC README file
 =====================
